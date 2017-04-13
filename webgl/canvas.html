@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Canvas</title>
+    <script type="text/javascript" src="../lib/cuon-utils.js"></script>
+    <script type="text/javascript" src="../lib/cuon-matrix.js"></script>
+    <script type="text/javascript" src="../lib/webgl-utils.js"></script>
+    <script type="text/javascript" src="../lib/webgl-debug.js"></script>
+</head>
+<body>
+<canvas id="canvas" width="800px" height="600px">
+
+</canvas>
+
+<script type="text/javascript">
+function main () {
+    var canvas = document.getElementById('canvas');
+    var gl = getWebGLContext(canvas);
+
+    var clickPoints = [];
+
+    gl.clearColor(0, 0, 0, 1.0);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+
+    canvas.onclick = function (event) {
+        var x = event.clientX;
+        var y = event.clientY;
+
+        var canvasX = event.target.getBoundingClientRect().x;
+        var canvasY = event.target.getBoundingClientRect().y;
+        var canvasW = event.target.getBoundingClientRect().width;
+        var canvasH = event.target.getBoundingClientRect().height;
+
+        x = x - canvasX;
+        y = y - canvasY;
+
+        x = (canvasW/2 - x) / canvasW/2;
+        y = (canvasH/2 - y) / canvasH/2;
+
+        clickPoints.push([x, y]);
+
+        gl.clearColor(0, 0, 0, 1.0);
+        gl.clear(gl.COLOR_BUFFER_BIT);
+
+        for(var i=0; i<clickPoints.length; i++) {
+
+            gl.vertexAttrib3f(a_Position, clickPoints[i][0], clickPoints[i][1], 0.0);
+
+            gl.drawArrays(gl.POINTS, 0, 1);
+
+        }
+    }
+//    var context = canvas.getContext('2d');
+//    context.fillStyle = 'rgba(255, 0, 0, 0.8)';
+//    context.fillRect(50, 50, 200, 200);
+
+    var vShaderSource = ' ' +
+            'attribute vec4 a_Position;' +
+            'void main () {' +
+            '//gl_Position = vec4(0.0, 0.0, 0.0, 1.0);\n' +
+            'gl_Position = a_Position;' +
+            'gl_PointSize = 10.0;' +
+            '}';
+    var fShaderSource = '' +
+            'void main () {' +
+            'gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0);' +
+            '}';
+
+    if (!initShaders(gl, vShaderSource, fShaderSource)) {
+        console.log('failed init shader');
+    }
+
+    var a_Position = gl.getAttribLocation(gl.program, 'a_Position');
+    if (a_Position < 0) {
+        console.info('获取position失败');
+    }
+    //console && console.info(gl);
+}
+
+main();
+</script>
+</body>
+</html>

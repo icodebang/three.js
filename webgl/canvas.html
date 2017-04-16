@@ -3,10 +3,10 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>Canvas</title>
-    <script type="text/javascript" src="../lib/cuon-utils.js"></script>
-    <script type="text/javascript" src="../lib/cuon-matrix.js"></script>
-    <script type="text/javascript" src="../lib/webgl-utils.js"></script>
-    <script type="text/javascript" src="../lib/webgl-debug.js"></script>
+    <script type="text/javascript" src="lib/cuon-utils.js"></script>
+    <script type="text/javascript" src="lib/cuon-matrix.js"></script>
+    <script type="text/javascript" src="lib/webgl-utils.js"></script>
+    <script type="text/javascript" src="lib/webgl-debug.js"></script>
 </head>
 <body>
 <canvas id="canvas" width="800px" height="600px">
@@ -35,8 +35,8 @@ function main () {
         x = x - canvasX;
         y = y - canvasY;
 
-        x = (canvasW/2 - x) / canvasW/2;
-        y = (canvasH/2 - y) / canvasH/2;
+        x = (x - canvasW/2) / (canvasW/2);
+        y = (canvasH/2 - y) / (canvasH/2);
 
         clickPoints.push([x, y]);
 
